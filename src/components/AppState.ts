@@ -6,7 +6,7 @@ class AppState {
 protected  _items: IProduct[] = [];
 protected _basketItems: IBasket = { items: [], total: 0 }; 
 protected _userData: IOrder = { payment: 'cash', mail: '', phone: '', address: '', total: 0, items: [] };
-protected _formErrors: IValidationForm = { valid: true, errors: [] };
+protected _formErrors: Partial<Record<keyof IOrder, string>>;
 protected preview: string = '';
 
 constructor(protected events: IEvents) {
@@ -19,19 +19,8 @@ set items(items: IProduct[]) {
 
 set userData (data: IOrder){
   this.userData = data
-  ////// ВАЛИДАЦИЮ СДЕЛАТЬ
-  ////// ВАЛИДАЦИЮ СДЕЛАТЬ
-  ////// ВАЛИДАЦИЮ СДЕЛАТЬ
-  ////// ВАЛИДАЦИЮ СДЕЛАТЬ
-  ////// ВАЛИДАЦИЮ СДЕЛАТЬ
-  ////// ВАЛИДАЦИЮ СДЕЛАТЬ
-  ////// ВАЛИДАЦИЮ СДЕЛАТЬ
-  ////// ВАЛИДАЦИЮ СДЕЛАТЬ
 }
 
-set formErrors (data: IValidationForm) {
-  this._formErrors.errors.push(data: IValidationForm)
-}
 
 get items() { return this._items; }
 get userData() { return this._userData; }
@@ -80,26 +69,23 @@ clearBasket() {
 
 // - проверяет, заполнены ли контактные данные пользователя, записывает ошибки в formErrors и эмитит событие 'input:error'.
 validateContact(): boolean {
-  const errors: { [key: string]: string } = {};
-
-  if (!this.userData.address) {
-      errors.address = 'Необходимо указать адрес';
-  }
-  if (!this.userData.payment) {
-      errors.payment = 'Необходимо указать способ оплаты';
-  }
-  if (!this.userData.mail) {
-      errors.email = 'Необходимо указать email';
-  }
-  if (!this.userData.phone) {
-      errors.phone = 'Необходимо указать номер телефона';
-  }
-
-  this.formErrors = errors; // Обновляем объект ошибок
-  this.events.emit('input:error', this.formErrors); // Генерируем событие
-
-  return Object.keys(errors).length === 0; // Если ошибок нет, возвращаем true
-}
+    const errors: typeof this._formErrors = {};
+    if (!this.userData.address) {
+     errors.address = 'Необходимо указать адрес';
+    }
+    if (!this.userData.payment) {
+     errors.payment = 'Необходимо указать способ оплаты';
+    }
+    if (!this.userData.mail) {
+     errors.mail = 'Необходимо указать email';
+    }
+    if (!this.userData.phone) {
+     errors.phone = 'Необходимо указать номер телефона';
+    }
+    this._formErrors = errors;
+    this.events.emit('input:error', this.formErrors);
+    return Object.keys(errors).length === 0;
+   }
 
 // - очищает контактные данные пользователя и эмитит событие 'input:error'.
 clearOrder() {
@@ -110,21 +96,7 @@ clearOrder() {
 // - обновляет одно из полей контактных данных пользователя, после чего запускает валидацию формы.
 addOrderField(field: keyof IUserInfo, value: string & payment) {
   this._userData[field] = value;
-      ////// ВАЛИДАЦИЮ СДЕЛАТЬ
-  ////// ВАЛИДАЦИЮ СДЕЛАТЬ
-  ////// ВАЛИДАЦИЮ СДЕЛАТЬ
-  ////// ВАЛИДАЦИЮ СДЕЛАТЬ
-  ////// ВАЛИДАЦИЮ СДЕЛАТЬ
-  ////// ВАЛИДАЦИЮ СДЕЛАТЬ
-  ////// ВАЛИДАЦИЮ СДЕЛАТЬ
-  ////// ВАЛИДАЦИЮ СДЕЛАТЬ  ////// ВАЛИДАЦИЮ СДЕЛАТЬ
-  ////// ВАЛИДАЦИЮ СДЕЛАТЬ
-  ////// ВАЛИДАЦИЮ СДЕЛАТЬ
-  ////// ВАЛИДАЦИЮ СДЕЛАТЬ
-  ////// ВАЛИДАЦИЮ СДЕЛАТЬ
-  ////// ВАЛИДАЦИЮ СДЕЛАТЬ
-  ////// ВАЛИДАЦИЮ СДЕЛАТЬ
-  ////// ВАЛИДАЦИЮ СДЕЛАТЬ
+  this.validateContact()
 }
 
 // - проверяет, есть ли товар в корзине по его ID, и возвращает true или false.
