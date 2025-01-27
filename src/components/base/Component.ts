@@ -1,0 +1,44 @@
+abstract class Component<T> {
+  protected _container: HTMLElement;
+  constructor(_container: HTMLElement) {
+    this._container = _container;
+  }
+
+//- переключить класс
+switchClass(className: string, element?: HTMLElement | HTMLTemplateElement) {
+  if (element) {
+    element.classList.toggle(className);
+    return
+  }
+  this._container.classList.toggle(className);
+}
+//  - установить текст для элемента
+setText(text: string, className?: string) {
+  if (className) {
+    this._container.querySelector(className).textContent = text;
+    return
+  }
+  this._container.textContent = text;
+}
+// - заблокировать/разблокировать элемент(к примеру кнопка, атрибут disabled)
+setBlocked(isBlocked: boolean, element: HTMLButtonElement) {
+  element.disabled = isBlocked;
+}
+// - скрыть элемент
+setHidden(element: HTMLElement) {
+  element.style.display = 'none';
+}
+
+// - показать элемент
+setVisible(element: HTMLElement) {
+  element.style.display = 'block';
+}
+setImage(element: HTMLImageElement, src: string) {
+  element.src = src
+}
+// - возвращает HTML элеме
+ render(data: Partial<T>): HTMLElement {
+  Object.assign(this as object, data ?? {});
+  return this._container;
+  }
+}
