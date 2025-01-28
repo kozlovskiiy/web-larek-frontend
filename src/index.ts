@@ -1,9 +1,16 @@
+import { Contacts } from './components/Contacts';
+import { AppState } from './components/AppState';
+import { Basket } from './components/Basket';
 import { LarekApi } from './components/LarekApi';
+import { Modal } from './components/Modal';
+import { Page } from './components/Page';
 import { EventEmitter } from './components/base/events';
 import './scss/styles.scss';
 import { API_URL, CDN_URL } from './utils/constants';
-import { ensureElement } from './utils/utils';
+import { cloneTemplate, ensureElement } from './utils/utils';
 
+const body = ensureElement<HTMLElement>('body');
+const modalContainer = ensureElement<HTMLElement>('.modal__container')
 
 const catalogCardTemplate = ensureElement<HTMLTemplateElement>('#card-catalog'); //Каталог карточек
 const productPreviewTemplate =
@@ -18,3 +25,12 @@ const events = new EventEmitter()
 
 const api = new LarekApi(API_URL, CDN_URL)
 
+const appData = new AppState(events)
+
+const page = new Page (body, events);
+
+const modal = new Modal(modalContainer, events)
+
+const basket = new Basket (cloneTemplate<HTMLTemplateElement>(basketItemTemplate), events);
+
+const contacts = new Contacts(cloneTemplate<HTMLTemplateElement>(contactsModalTemplate), events);

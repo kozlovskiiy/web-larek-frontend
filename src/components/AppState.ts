@@ -2,7 +2,7 @@ import { payment } from './../types/index';
 import { IProduct, IValidationForm, IBasket, IOrder, IUserInfo } from "../types"
 import { IEvents } from "./base/events";
 
-class AppState {
+export class AppState {
 protected  _items: IProduct[] = [];
 protected _basketItems: IBasket = { items: [], total: 0 }; 
 protected _userData: IOrder = { payment: 'cash', mail: '', phone: '', address: '', total: 0, items: [] };
@@ -27,11 +27,9 @@ get userData() { return this._userData; }
 get	basketItems() { return this._basketItems.items }
 
 get totalBasketPrice(): number | null { 
-    this.basketItems.forEach(item => {
-    this._basketItems.total += item.price 
-  }) 
-  return this._basketItems.total
- } 
+    return this.basketItems.reduce((acc, item) => acc + item.price, 0)
+} 
+
 
 get countBasket() { return this.basketItems.length }
 get formErrors() { return this._formErrors }

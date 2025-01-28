@@ -1,4 +1,4 @@
-abstract class Component<T> {
+export abstract class Component<T> {
   protected _container: HTMLElement;
   constructor(_container: HTMLElement) {
     this._container = _container;
