@@ -8,6 +8,8 @@ import { EventEmitter } from './components/base/events';
 import './scss/styles.scss';
 import { API_URL, CDN_URL } from './utils/constants';
 import { cloneTemplate, ensureElement } from './utils/utils';
+import { Order } from './components/Order';
+import { Success } from './components/Success';
 
 const body = ensureElement<HTMLElement>('body');
 const modalContainer = ensureElement<HTMLElement>('.modal__container')
@@ -34,3 +36,12 @@ const modal = new Modal(modalContainer, events)
 const basket = new Basket (cloneTemplate<HTMLTemplateElement>(basketItemTemplate), events);
 
 const contacts = new Contacts(cloneTemplate<HTMLTemplateElement>(contactsModalTemplate), events);
+
+const order = new Order(cloneTemplate<HTMLFormElement>(orderModalTemplate), events);
+
+const success = new Success(cloneTemplate<HTMLDivElement>(successModalTemplate), events, {
+	onClick: () => {
+		modal.close()
+	}
+})
+

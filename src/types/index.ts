@@ -52,3 +52,7 @@ export interface IUserInfo {
   mail: string;
   phone: number;
 }
+
+export interface IAction {
+  onClick: () => void;
+}
