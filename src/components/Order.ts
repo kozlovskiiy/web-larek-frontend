@@ -15,9 +15,9 @@ export class Order extends Form<Partial<IOrder>> {
 // Конструктор кладет в поля элементы DOM-кнопок и при нажатии отправляет событие о изменении в форме о изменении способа оплаты
   constructor(_container: HTMLFormElement, protected events: IEvents) {
     super(_container, events) 
-    this._btnCash = ensureElement<HTMLButtonElement>('button[name="cash"]');
-    this._btnCard = ensureElement<HTMLButtonElement>('button[name="card"]');
-    this._address = ensureElement<HTMLInputElement>('input[name="address"]');
+    this._btnCash = ensureElement<HTMLButtonElement>('button[name="cash"]', this._container);
+    this._btnCard = ensureElement<HTMLButtonElement>('button[name="card"]', this._container);
+    this._address = ensureElement<HTMLInputElement>('input[name="address"]', this._container);
 
     this._btnCash.addEventListener('click', () => this.changesInForm('payment', 'cash'));
     this._btnCard.addEventListener('click', () => this.changesInForm('payment', 'card'));

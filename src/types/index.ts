@@ -7,6 +7,12 @@ export type category =
  | 'кнопка'
  | 'хард-скил';
 
+
+export type CategoryMap = {
+   [Key in  category]: string;
+  };
+
+
 export interface IProduct {
   id: string;
   title: string;
@@ -32,7 +38,7 @@ export interface IBasket {
 }
 
 export interface IPage {
-  cards: IProduct[];
+  items: IProduct[];
   total: number; 
 }
 
@@ -56,3 +62,10 @@ export interface IUserInfo {
 export interface IAction {
   onClick: () => void;
 }
+
+export interface ICardAction {
+   onClick: (event: MouseEvent) => void;
+   price: price;
+   title: string;
+   index?: number;
+  }

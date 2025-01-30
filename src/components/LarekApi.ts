@@ -1,4 +1,4 @@
-import { IOrder, IProduct } from "../types";
+import { IOrder, IPage, IProduct } from "../types";
 import { Api, ApiListResponse } from "./base/api";
 
 export class LarekApi extends Api {
@@ -8,19 +8,24 @@ export class LarekApi extends Api {
     this._cdn = cdn;
   }
 
-  getProducts() {
+	getProducts(): Promise<IPage> {
 		return this.get('/product')
 			.then((data: ApiListResponse<IProduct>) => {
 				console.log('Данные получены:', data); 
-				return data.items.map((item) => ({
-					...item,
-					image: this._cdn + item.image,
-				}));
+				return {
+					items: data.items.map((item) => ({
+						...item,
+						image: this._cdn + item.image,
+					})),
+					total: data.total,
+				};
 			})
 			.catch((err) => {
 				console.error('Ошибка получения данных:', err);
+				return { items: [], total: 0 };
 			});
 	}
+
 
 	postOrder(order: IOrder) {
 		return this.post('/order', order).then((data: IOrder) => data);

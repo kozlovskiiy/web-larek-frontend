@@ -5,13 +5,9 @@ export abstract class Component<T> {
   }
 
 //- переключить класс
-switchClass(className: string, element?: HTMLElement | HTMLTemplateElement) {
-  if (element) {
-    element.classList.toggle(className);
-    return
-  }
-  this._container.classList.toggle(className);
-}
+switchClass(element: HTMLElement, className: string, force?: boolean) {
+    element.classList.toggle(className, force);
+   }
 //  - установить текст для элемента
 setText(text: string, className?: string) {
   if (className) {

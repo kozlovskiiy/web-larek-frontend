@@ -12,7 +12,7 @@ protected preview: string = '';
 constructor(protected events: IEvents) {
 }
 
-set items(items: IProduct[]) {
+set items(items: Partial<IProduct[]>) {
   this._items = items;
   this.events.emit('items:changed'); 
 }

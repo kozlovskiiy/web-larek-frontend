@@ -15,8 +15,8 @@ export class Form<T> extends Component<IValidationForm> {
 // Добавляет слушатель события submit, предотвращает стандартное поведение формы и эмитит событие <имя формы>:submit.
   constructor (protected _container: HTMLFormElement, protected events: IEvents) {
     super(_container)
-    this._submitButton = ensureElement<HTMLButtonElement>('button[type="submit"]');
-    this._errorsElements = ensureElement<HTMLElement>('.form__errors');
+    this._submitButton = ensureElement<HTMLButtonElement>('button[type="submit"]', this._container);
+    this._errorsElements = ensureElement<HTMLElement>('.form__errors', this._container);
     
     this._container.addEventListener('input', (event) => {
       const target = event.target as HTMLInputElement

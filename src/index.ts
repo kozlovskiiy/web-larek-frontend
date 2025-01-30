@@ -10,6 +10,8 @@ import { API_URL, CDN_URL } from './utils/constants';
 import { cloneTemplate, ensureElement } from './utils/utils';
 import { Order } from './components/Order';
 import { Success } from './components/Success';
+import { IPage, IProduct } from './types';
+import { Card, CardOnPage } from './components/Card';
 
 const body = ensureElement<HTMLElement>('body');
 const modalContainer = ensureElement<HTMLElement>('.modal__container')
@@ -22,6 +24,8 @@ const basketModalTemplate = ensureElement<HTMLTemplateElement>('#basket'); //М�
 const orderModalTemplate = ensureElement<HTMLTemplateElement>('#order'); //Модальное окно заказа
 const contactsModalTemplate = ensureElement<HTMLTemplateElement>('#contacts'); // Модальное окно контактов
 const successModalTemplate = ensureElement<HTMLTemplateElement>('#success'); //Модальное окно успешного заказа
+
+
 
 const events = new EventEmitter()
 
@@ -43,5 +47,32 @@ const success = new Success(cloneTemplate<HTMLDivElement>(successModalTemplate),
 	onClick: () => {
 		modal.close()
 	}
+})
+
+// 11. В объекте api вызываем метод getProducts(), при успешном выполнении запроса кладем в поле объекта AppState.items массив карточек и отправляем событие ( items:changed — событие, которое происходит при изменении списка товаров и вызывает перерисовку списка товаров на странице.)
+//return getProducts {total: 10, items: Array(10)}
+api.getProducts().then((data: IPage) => {
+	appData.items = data.items
+	console.log(appData.items)
+})
+
+//  12. Слушаем событие (items:changed) и  в объекте appModelPage(который хранит в себе основные элементы страницы) в поле catalog(это сеттер который пушит карточки на страницу)  говорим: возьми все карточки которые сейчас лежит в appModel(в поле items) перебери их, и подставь в поля карточки данные из сервера. С помощью рендера карточка наполняется всеми остальными данными. Так же в объект карточки передается событие сard:selected и будет вызвано при клике на нее.(ПОДУМАТЬ КАК НАПОЛНЯТЬ КАРТОЧКУ СРАЗУ!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!)
+events.on('items:changed', () => {
+	page.catalog = appData.items.map((item: IProduct) => {
+		const card = new CardOnPage(cloneTemplate<HTMLTemplateElement>(catalogCardTemplate), {
+			onClick: () => {
+				events.emit('card:selected', item)
+			},
+			price: item.price,
+			title: item.title
+		});
+		return card.render({
+			title: item.title,
+			price: item.price,
+			image: item.image,
+			id: item.id,
+			category: item.category
+		})
+	})
 })
 
