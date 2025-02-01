@@ -1,4 +1,4 @@
-import { IAction, ICardAction, price } from './types/index';
+import { IAction, ICardAction, IOrder, ISucces, IUserInfo, payment, price } from './types/index';
 import { Contacts } from './components/Contacts';
 import { AppState } from './components/AppState';
 import { Basket } from './components/Basket';
@@ -10,7 +10,7 @@ import './scss/styles.scss';
 import { API_URL, CDN_URL } from './utils/constants';
 import { cloneTemplate, ensureElement } from './utils/utils';
 import { Order } from './components/Order';
-import { Success } from './components/Success';
+import {  Success } from './components/Success';
 import { IPage, IProduct } from './types';
 import { Card, CardOnPage, FullCard } from './components/Card';
 
@@ -169,9 +169,77 @@ events.on('basket:toOrder', () => {
 	})
 })
 })
+
 // 23. Валидация слушает событие input:error, (Извлекает из объекта errors свойства payment, address, email и phone.
 //  Проверяет валидность заказа (order) и контактной информации (contacts) на основе отсутствия ошибок в соответствующих полях.
 //   Создает строку с ошибками для заказа и контактной информации, объединяя значения свойств address и payment (для заказа) и phone и email (для контактной информации) через точку с запятой (;).
 //   Присваивает значение поля payment из модели приложения (appModel) свойству payment объекта order.)
+events.on('input:error', (errors: Partial<IUserInfo>) => {
+	const { payment, address, email, phone } = errors;
+	order.valid = !payment && !address;
+	contacts.valid = !email && !phone;
+	order.errors = Object.values({ address, payment })
+		.filter((i) => !!i)
+		.join('; ');
+	contacts.errors = Object.values({ phone, email })
+		.filter((i) => !!i)
+		.join('; ');
+	order.payment = appData.getField();
+});
+
+
 // 24. Слушает событие orderInput:change (событие, возникающее при вводе данных в форму заказа Order и контактов Contacts. С помощью данного события активируется валидация.)
+events.on('orderInput:change',
+	(data: { field: keyof IUserInfo; value: string }) => {
+		appData.addOrderField(data.field, data.value as payment);
+	}
+);
+
 // 25. Слушает событие order:submit (отрисовываем страницу с вводом телефона и эмейла и сбрасываем значания в валидации)
+
+events.on('order:submit', () => {
+	modal.render({
+		content: contacts.render({
+			valid: false,
+			errors: [],
+		}),
+	});
+});
+
+events.on('contacts:submit', () => {
+	const orderFinal = appData.userData;
+	orderFinal.total = appData.totalBasketPrice;
+	const items = appData.getBasketId();
+
+	const payload: IOrder = {
+		payment: orderFinal.payment,
+		address: orderFinal.address,
+		email: orderFinal.email,
+		phone: orderFinal.phone,
+		total: orderFinal.total,
+		items: items,
+	};
+	api
+		.postOrder(payload)
+		.then((result) => {
+			events.emit('order:success', result);
+			appData.clearBasket();
+			page.basketCounter = appData.countBasket;
+		})
+		.catch((error) => {
+			console.error('Ошибка отправки заказа:', error);
+		});
+});
+
+events.on('order:success', (result: ISucces) => {
+	modal.render({
+		content: success.render({
+			total: result.total,
+		}),
+	});
+	// Очистка форм и данных после оформления заказа
+	order.clear();
+	contacts.clear();
+	appData.clearOrder();
+	appData.clearBasket();
+});

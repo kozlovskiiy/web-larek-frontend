@@ -16,6 +16,10 @@ export interface IModal {
     content: HTMLElement
 }
 
+export interface ISucces {
+	total: number;
+}
+
 export interface IProduct {
   id: string;
   title: string;
@@ -29,7 +33,7 @@ export interface IProduct {
 
 export interface IOrder{
   payment: payment;
-  mail: string;
+  email: string;
   phone: string;
   address: string;
   total: number;
@@ -59,7 +63,7 @@ export interface IValidationForm {
 export interface IUserInfo {
   payment: payment;
   address: string;
-  mail: string;
+  email: string;
   phone: number;
 }
 
@@ -68,7 +72,6 @@ export interface IAction {
 }
 
 export interface ICardAction {
- 
    onClick: (event: MouseEvent) => void;
    price: price;
    title: string;

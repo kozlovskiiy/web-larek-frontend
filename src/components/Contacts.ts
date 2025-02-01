@@ -1,5 +1,4 @@
 import { IUserInfo } from "../types";
-import { ensureElement } from "../utils/utils";
 import { Form } from "./Form";
 import { IEvents } from "./base/events";
 
@@ -13,13 +12,13 @@ set phone(value: string) {
     value;
 }
 // - установить email атрбиту name="email"
-set email(value: string) {
+set mail(value: string) {
   (this._container.elements.namedItem('email') as HTMLInputElement).value =
     value;
 }
 
 clear () {
   this.phone = '';  
-  this.email = '';
+  this.mail = '';
 }
 }

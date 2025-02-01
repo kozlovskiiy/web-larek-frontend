@@ -5,7 +5,7 @@ import { IEvents } from "./base/events";
 export class AppState {
 protected  _items: IProduct[] = [];
 protected _basketItems: IBasket = { items: [], total: 0 }; 
-protected _userData: IOrder = { payment: 'cash', mail: '', phone: '', address: '', total: 0, items: [] };
+protected _userData: IOrder = { payment: 'cash', email: '', phone: '', address: '', total: 0, items: [] };
 protected _formErrors: Partial<Record<keyof IOrder, string>>;
 protected preview: string = '';
 
@@ -74,8 +74,8 @@ validateContact(): boolean {
     if (!this.userData.payment) {
      errors.payment = 'Необходимо указать способ оплаты';
     }
-    if (!this.userData.mail) {
-     errors.mail = 'Необходимо указать email';
+    if (!this.userData.email) {
+     errors.email = 'Необходимо указать email';
     }
     if (!this.userData.phone) {
      errors.phone = 'Необходимо указать номер телефона';
@@ -87,7 +87,7 @@ validateContact(): boolean {
 
 // - очищает контактные данные пользователя и эмитит событие 'input:error'.
 clearOrder() {
-  this._userData = { payment: 'cash', mail: '', phone: '', address: '', total: 0, items: [] };
+  this._userData = { payment: 'cash', email: '', phone: '', address: '', total: 0, items: [] };
   this.events.emit('inpit:error')
 } 
 
@@ -101,6 +101,11 @@ addOrderField(field: keyof IUserInfo, value: string & payment) {
 hasProductInBasket(id: string): boolean {
   return this.basketItems.some((item) => item.id === id);
 }
+
+getField() {
+  return this.userData.payment;
+}
+
 }
 
 

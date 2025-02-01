@@ -18,12 +18,12 @@ export class Form<T> extends Component<IValidationForm> {
     this._submitButton = ensureElement<HTMLButtonElement>('button[type="submit"]', this._container);
     this._errorsElements = ensureElement<HTMLElement>('.form__errors', this._container);
     
-    this._container.addEventListener('input', (event) => {
-      const target = event.target as HTMLInputElement
+    this._container.addEventListener('input', (e: Event) => {
+      const target = e.target as HTMLInputElement
       const field = target.name as keyof T
       const value = target.value
       this.changesInForm(field, value)
-    })
+  })
 
     this._container.addEventListener('submit', (event) => {
       event.preventDefault()
