@@ -17,13 +17,18 @@ export class Card extends Component<IProduct> {
 // Принимает контейнер (HTMLElement) и объект ICardAction с параметрами:
   constructor (_container: HTMLElement, action?: ICardAction) {
     super(_container)
-    this._title = ensureElement<HTMLElement>('.card__title');
-    this._price = ensureElement<HTMLElement>('.card__price');
-    this._button = ensureElement<HTMLButtonElement>('.button');
+    this._title = ensureElement<HTMLElement>('.card__title', _container);
+    this._price = ensureElement<HTMLElement>('.card__price', _container);
+    this._button = _container.querySelector('.card__button');
     this._index = _container.querySelector('.basket__item-index');
-    if (action) {
-      this._button.addEventListener('click', () => action.onClick);
-    }
+  
+		if (action?.onClick) {
+			if (this._button) {
+				this._button.addEventListener('click', action.onClick);
+			} else {
+				_container.addEventListener('click', action.onClick);
+			}
+		}
   }
 
   // устанавливает порядковый номер.
@@ -80,7 +85,7 @@ export class FullCard extends CardOnPage {
   protected	_description: HTMLElement;
   constructor(_container: HTMLElement, action?: ICardAction) { 
     super(_container, action)
-    this._description = ensureElement<HTMLElement>('.card__text');
+    this._description = ensureElement<HTMLElement>('.card__text', _container);
    }
 // – устанавливает описание, используя this.setText().
    set description(value: string){

@@ -12,6 +12,9 @@ export type CategoryMap = {
    [Key in  category]: string;
   };
 
+export interface IModal {
+    content: HTMLElement
+}
 
 export interface IProduct {
   id: string;
@@ -20,7 +23,8 @@ export interface IProduct {
   description: string;
   price: price;
   image: string;
-  buyButton: string;
+  button: string;
+  index?: number
 }
 
 export interface IOrder{
@@ -64,6 +68,7 @@ export interface IAction {
 }
 
 export interface ICardAction {
+ 
    onClick: (event: MouseEvent) => void;
    price: price;
    title: string;

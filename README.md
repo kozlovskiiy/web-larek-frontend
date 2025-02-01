@@ -66,7 +66,12 @@ type category = - категории товаров
 - description: string - описание товара
 - price: price - цена товара (тип данных price)
 - image: string - изображение товара
-- buyButton: string - кнопка "Купить"
+- button: string - кнопка "Купить"
+- index?: number - нумерация товаров в корзине
+```
+### Интерфейс IModal 
+```
+content: HTMLElement - описывает что должно быть в поле контента
 ```
 
 ### Интерфейс ICardAction

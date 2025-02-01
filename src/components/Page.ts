@@ -13,9 +13,12 @@ constructor (_container: HTMLElement, protected events: IEvents) {
   super(_container)
   this._basketCounter = ensureElement<HTMLElement>('.header__basket-counter');
   this._catalog = ensureElement<HTMLElement>('.gallery');
-  // this._pageWrapper = ensureElement<HTMLElement>('.page__wrapper'); 
-  // this._basket = ensureElement<HTMLElement>('.header__basket')
-}
+  this._pageWrapper = ensureElement<HTMLElement>('.page__wrapper'); 
+  this._basket = ensureElement<HTMLElement>('.header__basket')
+
+  if (this._basket) {
+    this._basket.addEventListener('click', () => this.events.emit('basket:open'));
+}}
 //  - установить значение счетчика
 set basketCounter(count: number) {
   this.setText(count.toString(), '.header__basket-counter');
@@ -26,11 +29,11 @@ set catalog(items: HTMLElement[]) {
 }
 
 // заблокировать / разблокировать прокрутку
-set locked(overflow: boolean) {
-  if(overflow) {
-    document.body.style.overflow = 'hidden'; // Отключает прокрутку
+set locked(value: boolean) {
+  if (value) {
+    this._pageWrapper.classList.add('page__wrapper_locked');
   } else {
-    document.body.style.overflow = ''; // Включает обратно
+    this._pageWrapper.classList.remove('page__wrapper_locked');
   }
 }
 }

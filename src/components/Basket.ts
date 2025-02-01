@@ -10,9 +10,11 @@ protected button?: HTMLButtonElement;
 
 constructor (_container: HTMLElement, protected events: IEvents) {
   super(_container)
-  this._items = ensureElement<HTMLElement>('.basket__list');
+  this._items = ensureElement<HTMLElement>('.basket__list', this._container);
   this._total = ensureElement<HTMLElement>('.basket__price');
-  this.button = ensureElement<HTMLButtonElement>('.button');
+  this.button = _container.querySelector(
+    '.basket__button'
+  ) as HTMLButtonElement;
   
   if (this.button) {
     this.button.addEventListener('click', () => this.events.emit('basket:toOrder'));
@@ -32,6 +34,7 @@ constructor (_container: HTMLElement, protected events: IEvents) {
     this.button.setAttribute('disabled', 'disabled');
   }
 }
+
 //устанавливает финальную стоимость товаров
 
 set total(total: number) {

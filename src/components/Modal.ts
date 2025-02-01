@@ -1,8 +1,9 @@
+import { IModal } from "../types";
 import { ensureElement } from "../utils/utils";
 import { Component } from "./base/Component";
 import { IEvents } from "./base/events";
 
-export class Modal extends Component<HTMLElement> {
+export class Modal extends Component<IModal> {
   protected _closeButton: HTMLButtonElement;
   protected _content: HTMLElement;
 
@@ -16,8 +17,8 @@ export class Modal extends Component<HTMLElement> {
 
 constructor (_container: HTMLElement, protected events: IEvents) {
   super(_container) 
-  this._closeButton = ensureElement<HTMLButtonElement>('.modal__close');  
-  this._content = ensureElement<HTMLElement>('.modal__content');
+  this._closeButton = ensureElement<HTMLButtonElement>('.modal__close', _container);  
+  this._content = ensureElement<HTMLElement>('.modal__content', _container);
 
   this._closeButton.addEventListener('click', () => this.close());
   this._container.addEventListener('click', (event) => {
@@ -39,10 +40,10 @@ open() {
 // - закрывает модальное окно, очищает контент и эмитит событие 'modal:close'.
 close() {
   this._container.classList.remove('modal_active');
-  this.events.emit('modal: close');
+  this.events.emit('modal:close');
 }
 // - принимает объект `IModal`, передает его в родительский метод `render()`, открывает модальное окно и возвращает его контейнер.
-render(data: Partial<HTMLElement>): HTMLElement {
+render(data: IModal): HTMLElement {
   super.render(data)
   this.open()
   return this._container;

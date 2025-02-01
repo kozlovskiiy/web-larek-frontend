@@ -11,7 +11,6 @@ export class LarekApi extends Api {
 	getProducts(): Promise<IPage> {
 		return this.get('/product')
 			.then((data: ApiListResponse<IProduct>) => {
-				console.log('Данные получены:', data); 
 				return {
 					items: data.items.map((item) => ({
 						...item,

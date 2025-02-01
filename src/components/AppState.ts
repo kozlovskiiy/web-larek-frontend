@@ -34,9 +34,9 @@ get totalBasketPrice(): number | null {
 get countBasket() { return this.basketItems.length }
 get formErrors() { return this._formErrors }
 // - запоминает ID товара для предпросмотра и эмитит событие 'prepreview:change'.
-setPreview(id: string) {
-  this.preview = id;
-  this.events.emit('preview:change');
+setPreview(card: IProduct) {
+  this.preview = card.id;
+  this.events.emit('preview:change', card);
 }
 
 // возвращает массив ID всех товаров, находящихся в корзине.
@@ -98,8 +98,8 @@ addOrderField(field: keyof IUserInfo, value: string & payment) {
 }
 
 // - проверяет, есть ли товар в корзине по его ID, и возвращает true или false.
-hasProductInBasket(id: string) {
-  return this.basketItems.some(item => item.id === id);
+hasProductInBasket(id: string): boolean {
+  return this.basketItems.some((item) => item.id === id);
 }
 }
 

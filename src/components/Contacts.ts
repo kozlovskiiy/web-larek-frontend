@@ -1,18 +1,21 @@
+import { IUserInfo } from "../types";
 import { ensureElement } from "../utils/utils";
-import { Component } from "./base/Component";
+import { Form } from "./Form";
 import { IEvents } from "./base/events";
 
-export class Contacts extends Component<HTMLElement> {
-  constructor (_container: HTMLElement, protected events: IEvents) {
-    super(_container)
+export class Contacts extends Form<IUserInfo> {
+  constructor (_container: HTMLFormElement, protected events: IEvents) {
+    super(_container, events)
   }
 //  - установить номер телефона атрибут name="phone"
-set phone(phone: string) {
-  ensureElement<HTMLInputElement>('input[name="phone"]').value = phone;
+set phone(value: string) {
+  (this._container.elements.namedItem('phone') as HTMLInputElement).value =
+    value;
 }
 // - установить email атрбиту name="email"
-set email(email: string) {
-  ensureElement<HTMLInputElement>('input[name="email"]').value = email;
+set email(value: string) {
+  (this._container.elements.namedItem('email') as HTMLInputElement).value =
+    value;
 }
 
 clear () {
