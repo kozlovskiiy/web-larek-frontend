@@ -115,6 +115,7 @@ events.on('preview:change', (item: IProduct) => {
 			button:  itemInBasket ? 'Удалить из корзины' : 'В корзину' 
 		})
 })
+modal.open()
 })
 
 // 18. Слушаем событие basket:change, меняем визуальный счетчик товаров в корзине, ставим финальную стоимость, перебираем карточки в корзине, реднерим их , вешаем слушатель в каждой карточке на удаление при клике. По итогу у нас корзина имеет актуальный массив карточек и счетчик.
@@ -151,7 +152,9 @@ events.on('basket:remove', (item: IProduct) => {
 events.on('basket:open', () => {
 	modal.render({
 		content: basket.render({}),
+		
 	});
+	modal.open()
 });
 
 
@@ -207,18 +210,11 @@ events.on('order:submit', () => {
 });
 
 events.on('contacts:submit', () => {
-	const orderFinal = appData.userData;
-	orderFinal.total = appData.totalBasketPrice;
-	const items = appData.getBasketId();
-
-	const payload: IOrder = {
-		payment: orderFinal.payment,
-		address: orderFinal.address,
-		email: orderFinal.email,
-		phone: orderFinal.phone,
-		total: orderFinal.total,
-		items: items,
-	};
+	const payload = {
+    ...appData.getUser(),
+    total: appData.totalBasketPrice,
+    items: appData.getBasketId()
+  };
 	api
 		.postOrder(payload)
 		.then((result) => {
@@ -243,3 +239,7 @@ events.on('order:success', (result: ISucces) => {
 	appData.clearOrder();
 	appData.clearBasket();
 });
+
+function getBasketId() {
+	throw new Error('Function not implemented.');
+}

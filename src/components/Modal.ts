@@ -45,7 +45,6 @@ close() {
 // - принимает объект `IModal`, передает его в родительский метод `render()`, открывает модальное окно и возвращает его контейнер.
 render(data: IModal): HTMLElement {
   super.render(data)
-  this.open()
   return this._container;
 }
 }

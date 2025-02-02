@@ -42,7 +42,6 @@ export interface IOrder{
 
 export interface IBasket {
   items: IProduct[];
-  total: price;
 }
 
 export interface IPage {

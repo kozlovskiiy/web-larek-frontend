@@ -1,11 +1,18 @@
 import { payment } from './../types/index';
-import { IProduct, IValidationForm, IBasket, IOrder, IUserInfo } from "../types"
+import { IProduct, IOrder, IUserInfo } from "../types"
 import { IEvents } from "./base/events";
 
 export class AppState {
 protected  _items: IProduct[] = [];
-protected _basketItems: IBasket = { items: [], total: 0 }; 
-protected _userData: IOrder = { payment: 'cash', email: '', phone: '', address: '', total: 0, items: [] };
+protected _basketItems: IProduct[] = []; 
+protected _userData: Partial<IOrder> = { 
+  payment: 'cash', 
+  email: '', 
+  phone: '', 
+  address: '' 
+};
+
+
 protected _formErrors: Partial<Record<keyof IOrder, string>>;
 protected preview: string = '';
 
@@ -17,14 +24,14 @@ set items(items: Partial<IProduct[]>) {
   this.events.emit('items:changed'); 
 }
 
-set userData (data: IOrder){
+set userData (data: Partial<IOrder>){
   this.userData = data
 }
 
 
 get items() { return this._items; }
 get userData() { return this._userData; }
-get	basketItems() { return this._basketItems.items }
+get	basketItems() { return this._basketItems }
 
 get totalBasketPrice(): number | null { 
     return this.basketItems.reduce((acc, item) => acc + item.price, 0)
@@ -44,6 +51,13 @@ getBasketId() {
   return this.basketItems.map(item => item.id);
 }
 
+getUser(): Omit<IOrder, 'total' | 'items'> {
+  return {
+    email: this._userData.email,
+    phone: this._userData.phone,
+    address: this._userData.address,
+    payment: this._userData.payment }
+}
 // - ищет и возвращает товар по его ID из общего списка товаров.
 getItemById(id: string) {
   return this.items.find(item => item.id === id);
@@ -51,17 +65,17 @@ getItemById(id: string) {
 
 // - добавляет товар в корзину по его ID и эмитит событие 'basket:change'.
 addBasket(id: string) {
-  this._basketItems.items.push(this._items.find(item => item.id === id));
+  this._basketItems.push(this._items.find(item => item.id === id));
   this.events.emit('basket:change')
 } 
 // - удаляет товар из корзины по его ID и эмитит событие 'basket:change'.
 deleteBasket(id: string) {
-  this._basketItems.items = this.basketItems.filter(item => item.id !== id);
+  this._basketItems = this.basketItems.filter(item => item.id !== id);
   this.events.emit('basket:change'); 
 }
 // - очищает корзину, удаляя все товары, и эмитит событие 'basket:change'.
 clearBasket() {
-  this._basketItems.items = [];
+  this._basketItems = [];
   this.events.emit('basket:change');
 }
 
