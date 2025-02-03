@@ -213,7 +213,7 @@ events.on('contacts:submit', () => {
 	const payload = {
     ...appData.getUser(),
     total: appData.totalBasketPrice,
-    items: appData.getBasketId()
+    items: appData.getBasketIds()
   };
 	api
 		.postOrder(payload)

@@ -47,7 +47,7 @@ setPreview(card: IProduct) {
 }
 
 // возвращает массив ID всех товаров, находящихся в корзине.
-getBasketId() {
+getBasketIds() {
   return this.basketItems.map(item => item.id);
 }
 
