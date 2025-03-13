@@ -1,11 +1,13 @@
 {
+  "homepage": "https://kozlovskiiy.github.io/web-larek-frontend",
   "name": "my-webpack-project",
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
   "devDependencies": {
-    "@babel/core": "^7.21.5",
-    "@babel/preset-env": "^7.21.5",
+    "@babel/core": "^7.26.10",
+    "@babel/plugin-syntax-dynamic-import": "^7.8.3",
+    "@babel/preset-env": "^7.26.9",
     "@typescript-eslint/eslint-plugin": "^5.59.1",
     "@typescript-eslint/parser": "^5.59.2",
     "@webpack-cli/generators": "^3.0.2",
@@ -42,6 +44,7 @@
     "lint": "eslint --ext .js,.ts ./src",
     "lint:fix": "npm run lint -- --fix",
     "format": "prettier ./src --write",
+    "predeploy": "npm run build",
     "deploy": "gh-pages -d dist"
   }
 }
