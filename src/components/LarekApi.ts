@@ -8,6 +8,22 @@ export class LarekApi extends Api {
     this._cdn = cdn;
   }
 
+	// getProducts(): Promise<IPage> {
+	// 	return this.get('/product')
+	// 		.then((data: ApiListResponse<IProduct>) => {
+	// 			return {
+	// 				items: data.items.map((item) => ({
+	// 					...item,
+	// 					image: this._cdn + item.image,
+	// 				})),
+	// 				total: data.total,
+	// 			};
+	// 		})
+	// 		.catch((err) => {
+	// 			console.error('Ошибка получения данных:', err);
+	// 			return { items: [], total: 0 };
+	// 		});
+	// }
 	getProducts(): Promise<IPage> {
 		return this.get('/product')
 			.then((data: ApiListResponse<IProduct>) => {
@@ -17,14 +33,13 @@ export class LarekApi extends Api {
 						image: this._cdn + item.image,
 					})),
 					total: data.total,
-				};
+				} as IPage; // Явное приведение типа
 			})
 			.catch((err) => {
 				console.error('Ошибка получения данных:', err);
-				return { items: [], total: 0 };
+				return { items: [], total: 0 } as IPage; // Явное приведение типа
 			});
 	}
-
 
 	postOrder(order: IOrder) {
 		return this.post('/order', order).then((data: IOrder) => data);
