@@ -31,10 +31,6 @@ const config = {
       template: "src/pages/index.html"
     }),
 
-    new webpack.DefinePlugin({
-      'process.env.API_ORIGIN': JSON.stringify(process.env.API_ORIGIN)
-    }),
-
     new MiniCssExtractPlugin(),
 
     // Add your plugins here
